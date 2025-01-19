@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinosaur Fun Facts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        #app {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #2c2c2c;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #3a3a3a;
+            transform: scale(1.02);
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        input[type="text"] {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            width: calc(100% - 40px);
+            max-width: 560px;
+            font-size: 16px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+        }
+
+        input[type="text"]::placeholder {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Dinosaur Fun Facts</h1>
+        <input type="text" id="search" placeholder="Search for a dinosaur...">
+        <ul id="dinosaur-list"></ul>
+        <button id="toggle-facts">Toggle Facts</button>
+    </div>
+    <script>
+        const dinosaurFacts = [
+            {
+                "name": "Tyrannosaurus Rex",
+                "fact": "The T. Rex had the strongest bite of any land animal that ever lived, capable of crushing bones with a force of over 12,000 pounds."
+            },
+            {
+                "name": "Triceratops",
+                "fact": "Triceratops had a massive skull that could be up to one-third of its body length, featuring three distinctive horns and a large bony frill."
+            },
+            {
+                "name": "Velociraptor",
+                "fact": "Contrary to its portrayal in movies, Velociraptors were actually about the size of a turkey and were covered in feathers."
+            },
+            {
+                "name": "Stegosaurus",
+                "fact": "Stegosaurus had a brain the size of a walnut, which was very small compared to its body size, yet it had large, distinctive plates along its back."
+            },
+            {
+                "name": "Brachiosaurus",
+                "fact": "Brachiosaurus had longer front legs than back legs, which gave it a giraffe-like stance and allowed it to reach high vegetation."
+            },
+            {
+                "name": "Ankylosaurus",
+                "fact": "Ankylosaurus was heavily armored with bony plates and had a large club-like tail that it could use to defend against predators."
+            },
+            {
+                "name": "Spinosaurus",
+                "fact": "Spinosaurus is believed to have been semi-aquatic, spending much of its time in water, and it had a sail-like structure on its back."
+            },
+            {
+                "name": "Allosaurus",
+                "fact": "Allosaurus had serrated teeth that were ideal for slicing through the flesh of its prey, and it was one of the top predators of its time."
+            },
+            {
+                "name": "Pteranodon",
+                "fact": "Although not a dinosaur, Pteranodon was a flying reptile with a wingspan of over 20 feet, making it one of the largest flying creatures of its time."
+            },
+            {
+                "name": "Parasaurolophus",
+                "fact": "Parasaurolophus had a long, hollow crest on its head that may have been used to produce sounds for communication or as a display structure."
+            }
+        ];
+
+        const newDinosaurFacts = [
+            {
+                "name": "Diplodocus",
+                "fact": "Diplodocus was one of the longest dinosaurs, with some estimates suggesting it could reach lengths of up to 90 feet."
+            },
+            {
+                "name": "Iguanodon",
+                "fact": "Iguanodon was one of the first dinosaurs to be discovered and was known for its large thumb spikes."
+            },
+            {
+                "name": "Pachycephalosaurus",
+                "fact": "Pachycephalosaurus had a thick, domed skull that it may have used in head-butting contests."
+            },
+            {
+                "name": "Carnotaurus",
+                "fact": "Carnotaurus had distinctive horns above its eyes and was a fast predator with a lightweight build."
+            },
+            {
+                "name": "Apatosaurus",
+                "fact": "Apatosaurus, formerly known as Brontosaurus, was a massive sauropod with a long neck and tail."
+            },
+            {
+                "name": "Therizinosaurus",
+                "fact": "Therizinosaurus had enormous claws that could reach lengths of up to 3 feet, the longest of any known animal."
+            },
+            {
+                "name": "Giganotosaurus",
+                "fact": "Giganotosaurus was one of the largest theropods, even larger than the T. Rex, and lived in what is now Argentina."
+            },
+            {
+                "name": "Compsognathus",
+                "fact": "Compsognathus was a small, chicken-sized dinosaur that lived during the late Jurassic period."
+            },
+            {
+                "name": "Archaeopteryx",
+                "fact": "Archaeopteryx is considered one of the earliest birds and had features of both dinosaurs and modern birds."
+            },
+            {
+                "name": "Gallimimus",
+                "fact": "Gallimimus was an ostrich-like dinosaur known for its speed and agility, with a beak and long legs."
+            }
+        ];
+
+        let currentFacts = dinosaurFacts;
+
+        function displayFacts(facts) {
+            const dinosaurList = document.getElementById('dinosaur-list');
+            dinosaurList.innerHTML = ''; // Clear existing facts
+            facts.forEach(dino => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>${dino.name}</strong>: ${dino.fact}`;
+                dinosaurList.appendChild(listItem);
+            });
+        }
+
+        function filterFacts() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const filteredFacts = currentFacts.filter(dino => dino.name.toLowerCase().includes(searchInput));
+            displayFacts(filteredFacts);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayFacts(currentFacts);
+
+            const toggleButton = document.getElementById('toggle-facts');
+            toggleButton.addEventListener('click', () => {
+                currentFacts = currentFacts === dinosaurFacts ? newDinosaurFacts : dinosaurFacts;
+                displayFacts(currentFacts);
+            });
+
+            const searchInput = document.getElementById('search');
+            searchInput.addEventListener('input', filterFacts);
+        });
+    </script>
+</body>
+</html>
